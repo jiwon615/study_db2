@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * JdbcTemplate + e
+ * JdbcTemplate + 동적 쿼리
  */
 @Slf4j
 @Repository
