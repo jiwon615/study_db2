@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * JdbcTemplate + 동적 쿼리
+ * 기본 JdbcTemplate
+ * - 순서 기반 파라미터 바인딩을 지원함
  */
 @Slf4j
 @Repository

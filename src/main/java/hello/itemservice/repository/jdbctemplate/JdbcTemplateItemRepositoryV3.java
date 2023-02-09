@@ -7,49 +7,45 @@ import hello.itemservice.repository.ItemUpdateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 /**
- * NamedParameterJdbcTemplate 사용
- * - 이름 기반 파라미터 바인딩을 지원
+ * SimpleJdbcInsert
+ * - INSERT SQL을 편리하게 사용할 수 있음
  */
 @Slf4j
 @Repository
-public class JdbcTemplateItemRepositoryV2 implements ItemRepository {
-    private final NamedParameterJdbcTemplate template; // 적용!
+public class JdbcTemplateItemRepositoryV3 implements ItemRepository {
+    private final NamedParameterJdbcTemplate template;
+    private final SimpleJdbcInsert jdbcInsert;
 
-    public JdbcTemplateItemRepositoryV2(DataSource dataSource) {
-        this.template = new NamedParameterJdbcTemplate(dataSource);  // 적용!
+    public JdbcTemplateItemRepositoryV3(DataSource dataSource) {
+        this.template = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("item")
+                .usingGeneratedKeyColumns("id");
+//                .usingColumns("item_name", "price", "quantity"); // 생략가능 (특정 컬럼만 지정해서 저장하고 싶다면 usingColumns 사용하면 됨)
     }
 
     @Override
     public Item save(Item item) {
-        String sql = "insert into item (item_name, price, quantity)" +
-                " values ( :itemName, :price, :quantity)";
-
-        BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(item);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        template.update(sql, param, keyHolder);
-
-        long key = keyHolder.getKey().longValue();
-        item.setId(key);
+        SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+        Number key = jdbcInsert.executeAndReturnKey(param);
+        item.setId(key.longValue());
         return item;
     }
 
