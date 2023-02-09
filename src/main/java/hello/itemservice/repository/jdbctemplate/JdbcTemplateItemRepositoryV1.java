@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
@@ -19,11 +20,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * JdbcTemplate 구현
+ * JdbcTemplate + e
  */
 @Slf4j
+@Repository
 public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
-
     private final JdbcTemplate template;
 
     public JdbcTemplateItemRepositoryV1(DataSource dataSource) {
@@ -32,11 +33,12 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
 
     @Override
     public Item save(Item item) {
-        String sql = "insert into item (item_name, price, quantity) values (?, ?, ?)";
+        String sql = "insert into item (item_name, price, quantity) values ( ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(connection -> {
-        //자동 증가 키
-            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+        // 자동 증가 키
+            PreparedStatement ps = connection.prepareStatement(sql, new
+                    String[]{"id"});
             ps.setString(1, item.getItemName());
             ps.setInt(2, item.getPrice());
             ps.setInt(3, item.getQuantity());
@@ -49,7 +51,7 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
 
     @Override
     public void update(Long itemId, ItemUpdateDto updateParam) {
-        String sql = "update item set item_name=?, price=?, quantity=? where id=?";
+        String sql = "update item set item_name=?, price=?, quantity=? where id =?";
         template.update(sql,
                 updateParam.getItemName(),
                 updateParam.getPrice(),
@@ -104,5 +106,4 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
             return item;
         };
     }
-
 }

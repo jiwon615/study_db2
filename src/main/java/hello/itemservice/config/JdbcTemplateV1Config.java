@@ -23,6 +23,7 @@ public class JdbcTemplateV1Config {
 
     @Bean
     public ItemRepository itemRepository() {
+        // ItemRepository 구현체로 JdbcTemplateItemRepositoryV1이 사용되도록 했음
         return new JdbcTemplateItemRepositoryV1(dataSource);
     }
 }
