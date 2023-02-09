@@ -9,41 +9,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional // 적용!
 @SpringBootTest
-class ItemRepositoryTest {
+class ItemRepositoryTest_Transactional {
 
     @Autowired
-    ItemRepository itemRepository; // 기본적으론 이렇게 구현체보다는 인터페이스를 테스트하는 것이 좋음
+    ItemRepository itemRepository;
 
-    @Autowired
-    PlatformTransactionManager transactionManager;
-    TransactionStatus status;
-
-    @BeforeEach
-    void beforeEach() {
-        // 트랜잭션을 시작
-        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-    }
-
-    @AfterEach
-    void afterEach() {
-        //MemoryItemRepository 의 경우 제한적으로 사용
-        if (itemRepository instanceof MemoryItemRepository) {
-            ((MemoryItemRepository) itemRepository).clearStore();
-        }
-
-        // 트랜잭션 롤백
-        transactionManager.rollback(status);
-    }
-
+    @Commit  // 혹은 @Rollback(value=false)를 사용해도 됨
     @Test
     void save() {
         //given
