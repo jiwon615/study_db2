@@ -26,7 +26,7 @@ class ItemRepositoryTest_Transactional {
     @Autowired
     ItemRepository itemRepository;
 
-    @Commit  // 혹은 @Rollback(value=false)를 사용해도 됨
+//    @Commit  // 혹은 @Rollback(value=false)를 사용해도 됨
     @Test
     void save() {
         //given
