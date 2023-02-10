@@ -15,6 +15,9 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Spring Data JPA 사용
+ */
 @Repository
 @Transactional
 @RequiredArgsConstructor

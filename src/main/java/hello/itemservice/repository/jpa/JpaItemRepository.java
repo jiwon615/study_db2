@@ -14,6 +14,9 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 순수 JPA 사용
+ */
 @Slf4j
 @Repository
 @Transactional  // JPA의 모든 데이터 변경(save, update)은 트랜잭션 안에서 이루어져야 함. 여기에서는 그냥 클래스 전체에 적용함
