@@ -6,15 +6,17 @@ spring:
     username: sa
     password:
 
-#jdbcTemplate sql log
 logging:
   level:
     org:
-      springframework:
-        jdbc: DEBUG
-    hello.itemservice.repository.mybatis: trace # MyBatis에서 실행되는 쿼리 로그 확인 가능
+      springframework.jdbc: DEBUG                       #jdbcTemplate sql log
+      hibernate.sql: DEBUG # Hibernate가 생성하고 실행하는 SQL
+      hibernate.type.descriptor.sql.BasicBinder: TRACE  # SQL에 바인딩 되는 파라미터 확인 가능
+    hello.itemservice.repository.mybatis: trace         # MyBatis sql log
+
 # MyBatis
 mybatis:
   type-aliases-package: hello.itemservice.domain
   configuration:
     map-underscore-to-camel-case: true # false가 디폴트
+
