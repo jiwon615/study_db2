@@ -2,9 +2,9 @@ spring:
   profiles:
     active: test
   datasource:
-#    url: jdbc:h2:tcp://localhost/~/testcase
-#    username: sa
-#    password:
+    url: jdbc:h2:tcp://localhost/~/testcase
+    username: sa
+    password:
 
 #jdbcTemplate sql log
 logging:
@@ -12,3 +12,9 @@ logging:
     org:
       springframework:
         jdbc: DEBUG
+    hello.itemservice.repository.mybatis: trace
+# MyBatis
+mybatis:
+  type-aliases-package: hello.itemservice.domain
+  configuration:
+    map-underscore-to-camel-case: true # false가 디폴트
